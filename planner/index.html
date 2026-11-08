@@ -1688,7 +1688,7 @@ function vGuests(){
   <div style="margin-top:12px"><input id="q" class="search" placeholder="Search guests" value="${esc(ui.q)}"></div>
   <div class="seg" style="margin-top:8px">${[['all','All'],['wedding','Wedding'],['shower','Shower'],['snoans','Shower: no answer'],['pending','Wedding RSVP pending'],['yes','Coming'],['noaddr','No address'],['thanks','Thank-you owed']].map(([k,l])=>`<button data-gf="${k}" class="${ui.gfilter===k?'on':''}">${l}</button>`).join('')}</div>
   <div class="card" id="glist">${guestListHTML()}</div>
-  <div class="tools"><button class="btn ghost small" data-act="csv-guests">Copy addresses (for labels)</button></div>
+  <div class="tools"><label class="btn ghost small" style="cursor:pointer">↑ Import guest list (Zola, CSV, Excel)<input type="file" id="gin" accept=".csv,.xlsx,.xls,text/csv" hidden></label><button class="btn ghost small" data-act="csv-guests">Copy addresses (for labels)</button></div>
   <p class="note">"Copy addresses" puts the filtered list on your clipboard as a spreadsheet — paste into Google Sheets or a label maker.</p>`}
 
 /* ---------- RSVP inbox ---------- */
@@ -1813,6 +1813,7 @@ $('#sheet').addEventListener('click',async e=>{
   const pe=e.target.closest('[data-edit="payments"]');if(pe){openForm('payments',pe.dataset.id);return}
   const a=e.target.closest('[data-act]');if(!a)return;
   if(a.dataset.act==='close')closeSheet();
+  if(a.dataset.act==='doimport'){doGuestImport(a);return}
   if(a.dataset.act==='logout'){logout('');return}
   if(a.dataset.act==='addpay'){openForm('payments',null,{itemId:sheetCtx.id});return}
   if(a.dataset.act==='del'){if(a.dataset.sure){const c=sheetCtx;
@@ -1849,7 +1850,8 @@ $('#main').addEventListener('click',async e=>{const t=e.target;
     ...S.payments.map(p=>{const b=S.budget.find(x=>x.id===p.itemId)||{};return [b.name||'',b.vendor||'',p.label,num(p.amount),p.due,p.paid?'Yes':'No',p.datePaid,p.notes]})],'rows');
 });
 $('#main').addEventListener('change',async e=>{const lk=e.target.closest&&e.target.closest('[data-link]');if(lk&&lk.value){await linkRsvp(lk.dataset.link,lk.value);toast('Linked');return}
-if(e.target.id==='xin'&&e.target.files[0]){importXlsx(e.target.files[0]);e.target.value=''}});
+if(e.target.id==='xin'&&e.target.files[0]){importXlsx(e.target.files[0]);e.target.value=''}
+if(e.target.id==='gin'&&e.target.files[0]){prepGuestImport(e.target.files[0]);e.target.value=''}});
 $('#main').addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;const gl=$('#glist');if(gl)gl.innerHTML=guestListHTML()}});
 
 async function copyCSV(rows,what){
@@ -1926,6 +1928,62 @@ $('#main').addEventListener('submit',async e=>{if(e.target.id!=='loginForm')retu
   const v=$('#pk').value.trim().toLowerCase();if(!v)return;const b=e.target.querySelector('button');b.disabled=true;b.textContent='Checking…';
   passkey=v;ui.loginMsg='';mode='loading';const ok=await load(false);
   if(ok){ls.set('wp_key',v)}else if(mode!=='login'){passkey=null;mode='login';ui.loginMsg=ui.loginMsg||'Couldn\u2019t connect. Check your internet and try again.';render()}});
+
+/* ---------- guest list import (Zola export, any CSV / Excel) ---------- */
+function parseCSV(t){t=t.replace(/^﻿/,'');const rows=[];let row=[],f='',q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f=''}else f+=c}
+  if(f!==''||row.length){row.push(f);rows.push(row)}return rows.filter(r=>r.some(x=>String(x).trim()!==''))}
+async function readGuestRows(file){
+  if(/\.csv$/i.test(file.name)||file.type==='text/csv')return parseCSV(await file.text());
+  const book=await readXlsx(await file.arrayBuffer());const sh=Object.values(book)[0]||{};
+  const nums=Object.keys(sh).map(Number).sort((a,b)=>a-b);const colIdx=c=>c.split('').reduce((a,ch)=>a*26+ch.charCodeAt(0)-64,0)-1;
+  return nums.map(r=>{const out=[];Object.entries(sh[r]).forEach(([c,v])=>out[colIdx(c)]=v.v);return Array.from(out,x=>x==null?'':String(x))})}
+function guestsFromRows(rows){
+  const hi=rows.findIndex(r=>r.some(c=>/^(first name|name|guest name|full name)$/i.test(String(c).trim())));if(hi<0)return null;
+  const H=rows[hi].map(h=>String(h).trim().toLowerCase());
+  const find=(...pats)=>H.findIndex(h=>pats.some(p=>p instanceof RegExp?p.test(h):h===p));
+  const C={title:find('title'),first:find('first name'),last:find('last name'),name:find('name','guest name','full name'),
+    pFirst:find('partner first name'),pLast:find('partner last name'),
+    a1:find('street address','address','address line 1','street address (line 1)','address 1'),a2:find('street address (line 2)','address line 2','address 2','apt / suite'),
+    city:find('city'),state:find('state / region','state','state/province','province','region'),zip:find('zip / postal code','zip','zip code','postal code','zip/postal code'),
+    email:find('email','email address','e-mail'),phone:find('phone','phone number','mobile','cell'),
+    group:find('group','tags','relationship','affiliation','category','list')};
+  const kids=H.map((h,i)=>/^child \d+ (first )?name$/.test(h)?i:-1).filter(i=>i>=0);
+  const plus=find(/plus.?one/);
+  const v=(r,i)=>i<0?'':String(r[i]??'').trim();
+  const out=[];
+  for(const r of rows.slice(hi+1)){
+    const f=v(r,C.first),l=v(r,C.last),pf=v(r,C.pFirst),pl=v(r,C.pLast);
+    let name=v(r,C.name);
+    if(!name&&(f||l)){name=pf?(l&&(!pl||pl===l)?`${f} & ${pf} ${l}`:`${[f,l].filter(Boolean).join(' ')} & ${[pf,pl].filter(Boolean).join(' ')}`):[f,l].filter(Boolean).join(' ')}
+    if(!name)continue;
+    let size=1+(pf||pl?1:0)+kids.filter(i=>v(r,i)).length;const pv=v(r,plus).toLowerCase();if(pv&&/^(y|yes|true|1|\+1)/.test(pv))size++;
+    out.push({name,size,addr:[v(r,C.a1),v(r,C.a2)].filter(Boolean).join(', '),city:v(r,C.city),state:v(r,C.state),zip:v(r,C.zip),email:v(r,C.email),phone:v(r,C.phone),group:v(r,C.group)})}
+  return out}
+let pendingGuests=null;
+async function prepGuestImport(file){
+  let rows;try{rows=await readGuestRows(file)}catch(_){toast('That file couldn’t be read',4000);return}
+  const list=guestsFromRows(rows||[]);if(!list){toast('Couldn’t find a Name or First Name column in that file',5000);return}
+  if(!list.length){toast('No guests found in that file');return}
+  pendingGuests=list;const upd=list.filter(g=>S.guests.some(x=>normName(x.name)===normName(g.name))).length;
+  showSheet(`<div class="grab"></div><h4>Import ${list.length} guest${list.length>1?'s':''}</h4>
+   <p class="note">${list.length-upd} new${upd?`, ${upd} already on your list (their address and contact info will be filled in or updated — RSVPs and notes stay as they are)`:''}.</p>
+   <div class="card" style="max-height:220px;overflow:auto;padding:8px 14px">${list.slice(0,40).map(g=>`<div style="padding:6px 0;border-top:1px solid var(--line);font-size:14px"><b style="font-weight:500">${esc(g.name)}</b>${g.size>1?` (${g.size})`:''}<div style="font-size:12px;color:var(--muted)">${esc([g.addr,g.city,g.state,g.zip].filter(Boolean).join(', ')||'No address')}</div></div>`).join('')}${list.length>40?`<div class="note">…and ${list.length-40} more</div>`:''}</div>
+   <div class="f cb"><input type="checkbox" id="gi_w" checked><label for="gi_w">Invite new guests to the wedding</label></div>
+   <div class="f cb"><input type="checkbox" id="gi_s"><label for="gi_s">Invite new guests to the bridal shower</label></div>
+   <div class="actions"><button class="btn ghost" data-act="close">Cancel</button><button class="btn" data-act="doimport">Import</button></div>`)}
+async function doGuestImport(btn){
+  const list=pendingGuests;if(!list)return;const w=$('#gi_w').checked,sh=$('#gi_s').checked;btn.disabled=true;
+  let added=0,updated=0;
+  for(const g of list){btn.textContent=`Importing ${added+updated+1} of ${list.length}…`;
+    const ex=S.guests.find(x=>normName(x.name)===normName(g.name));
+    if(ex){const o=strip(ex);['addr','city','state','zip','email','phone','group'].forEach(k=>{if(g[k])o[k]=g[k]});if(!num(o.size)||num(g.size)>num(o.size))o.size=g.size;
+      if(await save('guests',ex.id,o))updated++}
+    else{if(await save('guests',null,{name:g.name,size:g.size,side:'Both / friends',group:g.group,addr:g.addr,city:g.city,state:g.state,zip:g.zip,phone:g.phone,email:g.email,
+        wedding:w,shower:sh,std:false,invite:false,rsvp:'Pending',showerRsvp:'Pending',meal:'',dietary:'',gift:'',thanks:false,notes:'From guest list import'}))added++;else break}}
+  pendingGuests=null;closeSheet();toast(`Added ${added}${updated?`, updated ${updated}`:''} guest${added+updated===1?'':'s'}`,4000)}
 
 /* ---------- boot ---------- */
 if(TABS.some(t=>t.k===location.hash.slice(1)))tab=location.hash.slice(1);
