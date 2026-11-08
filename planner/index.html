@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding Planner</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Wedding">
+<meta name="theme-color" content="#FBF8F3">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF8F3; --card:#FFFFFF; --ink:#2E2A26; --muted:#8A8178; --line:#ECE4D8;
+  --sage:#6F8470; --sage-soft:#E7EDE6; --blush:#C08A78; --blush-soft:#F6E9E3;
+  --gold:#B39361; --red:#B5523F; --red-soft:#F8E4DF;
+  --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+header{padding:calc(env(safe-area-inset-top) + 18px) 20px 6px;text-align:center}
+header .names{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:600;letter-spacing:.3px;cursor:pointer}
+header .sub{color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+main{padding:8px 16px calc(env(safe-area-inset-bottom) + 96px);max-width:640px;margin:0 auto}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;justify-content:space-around;
+  padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);z-index:20}
+nav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:11px;color:var(--muted);padding:4px 10px;cursor:pointer;font-weight:500}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7}
+nav button.on{color:var(--blush)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:12px 0}
+.hero{text-align:center;padding:22px 16px;background:linear-gradient(160deg,#fff 0%,var(--blush-soft) 100%)}
+.hero .label{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.hero .big{display:flex;justify-content:center;gap:14px;margin:10px 0 4px}
+.hero .big div{min-width:58px}
+.hero .big b{display:block;font-family:"Cormorant Garamond",serif;font-size:44px;line-height:1;font-weight:600}
+.hero .big span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.hero .when{color:var(--muted);font-size:13px}
+h2{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:600;margin:22px 4px 4px;display:flex;align-items:center;justify-content:space-between}
+h3{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:600}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.row:first-of-type{border-top:0}
+.row .main{flex:1;min-width:0}
+.row .t{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .s{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .r{text-align:right;font-size:13px;white-space:nowrap}
+.chip{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:99px;background:var(--sage-soft);color:var(--sage);font-weight:600;white-space:nowrap}
+.chip.blush{background:var(--blush-soft);color:var(--blush)}
+.chip.red{background:var(--red-soft);color:var(--red)}
+.chip.gray{background:#F1EEE9;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat .v{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600;line-height:1.1}
+.stat .k{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.stat.wide{grid-column:1/-1}
+.bar{height:8px;border-radius:99px;background:#F1EEE9;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--sage);border-radius:99px}
+.bar i.over{background:var(--red)}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:12px;padding:11px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.blush{background:var(--blush)}
+.btn.small{padding:7px 12px;font-size:13px;border-radius:10px}
+.btn.danger{background:transparent;color:var(--red);border:1px solid var(--red-soft)}
+.btn:disabled{opacity:.5}
+.add{background:var(--blush);color:#fff;border:0;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;font-family:Inter}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.seg{display:flex;gap:6px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font-size:13px;white-space:nowrap;cursor:pointer}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.empty{color:var(--muted);text-align:center;padding:18px 8px;font-size:14px}
+.check{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;background:#fff;cursor:pointer}
+.check.on{background:var(--sage);border-color:var(--sage)}
+.check.on::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.done .t{text-decoration:line-through;color:var(--muted)}
+.banner{background:var(--blush-soft);color:#7a4d40;border-radius:12px;padding:10px 14px;font-size:13px;margin:8px 0}
+.money{font-variant-numeric:tabular-nums}
+/* sheet */
+.veil{position:fixed;inset:0;background:rgba(46,42,38,.35);z-index:40;display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:var(--bg);z-index:41;
+  border-radius:22px 22px 0 0;padding:8px 18px calc(env(safe-area-inset-bottom) + 20px);display:none;max-width:640px;margin:0 auto}
+.sheet.open,.veil.open{display:block}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:6px auto 10px}
+.sheet h4{font-family:"Cormorant Garamond",serif;font-size:24px;margin:4px 0 12px;font-weight:600}
+.f{margin:0 0 12px}
+.f label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500}
+.f input,.f select,.f textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;min-height:44px}
+.f textarea{min-height:70px;resize:vertical}
+.f.cb{display:flex;align-items:center;gap:10px}
+.f.cb input{width:22px;height:22px;min-height:0;accent-color:var(--sage)}
+.f.cb label{margin:0;font-size:14px;color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet .actions{display:flex;gap:10px;margin-top:8px}
+.sheet .actions .btn{flex:1}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 86px);transform:translateX(-50%);
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13.5px;z-index:60;max-width:90vw;display:none}
+.note{font-size:12.5px;color:var(--muted);margin:6px 4px}
+.login{max-width:360px;margin:40px auto 0;text-align:center}
+.login .mono{width:84px;height:84px;border-radius:50%;border:1.5px solid var(--blush);display:grid;place-items:center;margin:0 auto 14px;font-family:"Cormorant Garamond",serif;font-size:46px;color:var(--blush)}
+.login input{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:17px;text-align:center;margin:14px 0 10px}
+a{color:var(--blush)}
+</style>
+</head>
+<body>
+<header>
+  <div class="names" id="names" title="Tap to edit">Our Wedding</div>
+  <div class="sub" id="subline">Planner</div>
+</header>
+<main id="main"><div class="empty">Loading…</div></main>
+<nav id="nav"></nav>
+<div class="veil" id="veil"></div>
+<div class="sheet" id="sheet"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* QR encoder: QRCode for JavaScript by Kazuhiko Arase (MIT), via qrcode-terminal (Apache-2.0). Bundled. */
+var QRLib=(function(){var M={};function req(n){n=n.replace(/^\.\//,"").replace(/\.js$/,"");if(n==="")n="index";var m=M[n];if(!m.l){m.l=1;m.f(m.m,m.m.exports,req)}return m.m.exports}
+M["QR8bitByte"]={l:0,m:{exports:{}},f:function(module,exports,require){
+var QRMode = require('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+}};
+M["QRBitBuffer"]={l:0,m:{exports:{}},f:function(module,exports,require){
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+}};
+M["QRErrorCorrectLevel"]={l:0,m:{exports:{}},f:function(module,exports,require){
+module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+}};
+M["QRMaskPattern"]={l:0,m:{exports:{}},f:function(module,exports,require){
+module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+}};
+M["QRMath"]={l:0,m:{exports:{}},f:function(module,exports,require){
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+}};
+M["QRMode"]={l:0,m:{exports:{}},f:function(module,exports,require){
+module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+}};
+M["QRPolynomial"]={l:0,m:{exports:{}},f:function(module,exports,require){
+var QRMath = require('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+}};
+M["QRRSBlock"]={l:0,m:{exports:{}},f:function(module,exports,require){
+var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+}};
+M["QRUtil"]={l:0,m:{exports:{}},f:function(module,exports,require){
+var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+}};
+M["index"]={l:0,m:{exports:{}},f:function(module,exports,require){
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+}};
+var QRCode=req("./index"),ECL=req("./QRErrorCorrectLevel");return {matrix:function(text,level){var q=new QRCode(-1,ECL[level||"M"]);q.addData(text);q.make();var n=q.getModuleCount(),rows=[];for(var r=0;r<n;r++){var row=[];for(var c=0;c<n;c++)row.push(q.isDark(r,c));rows.push(row)}return rows}};})();
+</script>
+<script>
+/* ---------- constants ---------- */
+const TABS=[
+ {k:'home',l:'Home',i:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'},
+ {k:'dates',l:'Dates',i:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'},
+ {k:'money',l:'Money',i:'<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2c-1.4 0-2.6-.6-3-1.6M12 6v2M12 16v2"/>'},
+ {k:'guests',l:'Guests',i:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14c2.6.2 4.4 2 5 4.5"/>'},
+ {k:'todo',l:'To-Do',i:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>'},
+];
+const EVENT_KINDS=['Wedding','Bridal shower','Bachelor party','Bachelorette party','Rehearsal dinner','Engagement party','Fitting / appointment','Deadline','Other'];
+const CATS=['Venue','Food & Drink','Photography','Entertainment','Attire','Beauty','Decor','Rentals / Decor','Flowers','Rings','Officiant','Stationery','Favors','Transportation','Bridal shower','Honeymoon','Other'];
+const TODO_CATS=['Planning','Vendors','Guests','Attire','Shower','Legal','Day-of','Other'];
+
+const SCHEMA={
+ events:[
+  {k:'name',l:'Event name',t:'text',req:1},
+  {k:'kind',l:'Type',t:'select',o:EVENT_KINDS},
+  {g:[{k:'date',l:'Date',t:'date'},{k:'time',l:'Time',t:'time'}]},
+  {k:'place',l:'Location',t:'text'},
+  {k:'notes',l:'Notes',t:'area'},
+ ],
+ budget:[
+  {k:'name',l:'Item',t:'text',req:1},
+  {k:'description',l:'Description',t:'text'},
+  {g:[{k:'category',l:'Category',t:'select',o:CATS},{k:'vendor',l:'Vendor',t:'text'}]},
+  {g:[{k:'price',l:'Price ($)',t:'num'},{k:'qty',l:'Quantity',t:'num'}]},
+  {k:'perGuest',l:'Quantity = planned guest count',t:'cb'},
+  {g:[{k:'phone',l:'Vendor phone',t:'tel'},{k:'email',l:'Vendor email',t:'email'}]},
+  {k:'link',l:'Link',t:'url'},
+  {k:'notes',l:'Notes',t:'area'},
+ ],
+ payments:[
+  {k:'itemId',l:'For item',t:'select',dyn:'items',req:1},
+  {k:'label',l:'Payment / deposit',t:'text',ph:'e.g. Deposit, Final balance'},
+  {g:[{k:'amount',l:'Amount ($)',t:'num',req:1},{k:'due',l:'Due date',t:'date'}]},
+  {k:'paid',l:'Paid',t:'cb'},
+  {k:'datePaid',l:'Date paid',t:'date'},
+  {k:'notes',l:'Notes',t:'area'},
+ ],
+ guests:[
+  {k:'name',l:'Name / household',t:'text',req:1,ph:'e.g. The Millers'},
+  {g:[{k:'size',l:'# of people',t:'num',def:1},{k:'side',l:'Side',t:'select',o:["Groom's side","Bride's side","Both / friends"]}]},
+  {k:'group',l:'Group',t:'text',ph:'Family, work, racing…'},
+  {k:'addr',l:'Street address',t:'text'},
+  {g:[{k:'city',l:'City',t:'text'},{k:'state',l:'State',t:'text'}]},
+  {g:[{k:'zip',l:'ZIP',t:'text'},{k:'phone',l:'Phone',t:'tel'}]},
+  {k:'email',l:'Email',t:'email'},
+  {k:'wedding',l:'Invited to wedding',t:'cb',def:true},
+  {k:'shower',l:'Invited to bridal shower',t:'cb'},
+  {g:[{k:'showerRsvp',l:'Shower RSVP',t:'select',o:['Pending','Yes','No']},{k:'showerParty',l:'# coming to shower',t:'num'}]},
+  {k:'std',l:'Save-the-date sent',t:'cb'},
+  {k:'invite',l:'Invitation sent',t:'cb'},
+  {g:[{k:'rsvp',l:'Wedding RSVP',t:'select',o:['Pending','Yes','No']},{k:'meal',l:'Meal choice',t:'text'}]},
+  {k:'dietary',l:'Allergies / dietary needs',t:'text'},
+  {k:'gift',l:'Gift received',t:'text'},
+  {k:'thanks',l:'Thank-you card sent',t:'cb'},
+  {k:'notes',l:'Notes',t:'area'},
+ ],
+ todos:[
+  {k:'title',l:'Task',t:'text',req:1},
+  {k:'cat',l:'Category',t:'select',o:TODO_CATS},
+  {g:[{k:'due',l:'Due date',t:'date'},{k:'monthsBefore',l:'…or months before wedding',t:'num'}]},
+  {k:'done',l:'Done',t:'cb'},
+  {k:'notes',l:'Notes',t:'area'},
+ ],
+};
+const TITLES={events:'event',budget:'budget item',payments:'payment',guests:'guest',todos:'task'};
+const COLS=['events','budget','payments','guests','todos','rsvps'];
+const SB_PROJECT='osbjpkhxerztakdqdyql',RSVP_DEFAULT='https://hititautosport.github.io/Wedding-rsvp/';
+
+/* ---------- state ---------- */
+const S={events:[],budget:[],payments:[],guests:[],todos:[],rsvps:[],settings:{}};
+let mode='loading', readOnly=false, tab='home', passkey=null, who='', pending=0, raw=[], intaking=false;
+const ui={gfilter:'all',q:'',mfilter:'all',mview:'items',tfilter:'open',gview:'list',qrEvent:'shower'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{const n=parseFloat(v);return isFinite(n)?n:0};
+const fmt=n=>'$'+Math.round(num(n)).toLocaleString();
+const fmt2=n=>'$'+num(n).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:2});
+function toast(m,ms=2600){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>t.style.display='none',ms)}
+
+/* ---------- dates ---------- */
+function parseD(d,t){if(!d)return null;const x=new Date(d+'T'+(t||'00:00'));return isNaN(x)?null:x}
+function today0(){const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())}
+function daysUntil(d){const x=parseD(d);if(!x)return null;return Math.round((x-today0())/864e5)}
+function niceDate(d,t){const x=parseD(d,t);if(!x)return 'Date not set';
+  let s=x.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  if(t)s+=' · '+x.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});return s}
+function dueChip(d,doneish){const n=daysUntil(d);if(n===null)return '';
+  if(doneish)return '';
+  if(n<0)return `<span class="chip red">${-n}d late</span>`;
+  if(n===0)return `<span class="chip blush">Today</span>`;
+  if(n<=14)return `<span class="chip blush">${n}d</span>`;
+  return `<span class="chip gray">${n}d</span>`}
+function wedding(){return S.events.find(e=>e.kind==='Wedding')}
+function addMonths(d,m){const x=new Date(d);if(Number.isInteger(m))x.setMonth(x.getMonth()+m);else x.setDate(x.getDate()+Math.round(m*30));return x}
+function iso(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
+function todoDue(t){if(t.due)return t.due;const w=wedding();if(w&&w.date&&t.monthsBefore!=null&&t.monthsBefore!=='')return iso(addMonths(parseD(w.date),-num(t.monthsBefore)));return ''}
+
+/* ---------- money ---------- */
+function expectedGuests(){return S.guests.filter(g=>g.wedding!==false&&g.rsvp!=='No').reduce((a,g)=>a+(num(g.size)||1),0)}
+function guestCount(){return num(S.settings.guestCount)||expectedGuests()}
+function qtyOf(b){return b.perGuest?guestCount():(b.qty===''||b.qty==null?null:num(b.qty))}
+function itemCost(b){const q=qtyOf(b);if(b.price===''||b.price==null||q===null)return 0;return num(b.price)*q}
+function itemPays(id){return S.payments.filter(p=>p.itemId===id)}
+function paidFor(id){return itemPays(id).filter(p=>p.paid).reduce((a,p)=>a+num(p.amount),0)}
+function nextDue(id){const u=itemPays(id).filter(p=>!p.paid&&p.due).map(p=>p.due).sort();return u[0]||''}
+function itemStatus(b){const c=itemCost(b),p=paidFor(b.id);
+  if(c>0&&p>=c)return ['Paid','chip'];if(p>0)return ['Partially paid','chip blush'];if(c===0)return [qtyOf(b)===null&&b.price!==''&&b.price!=null?'Needs quantity':'No price yet','chip gray'];return ['Not paid','chip gray']}
+function itemName(id){const b=S.budget.find(x=>x.id===id);return b?b.name:'(deleted item)'}
+function totals(){let est=0,paid=0,rem=0;S.budget.forEach(b=>{const c=itemCost(b),p=paidFor(b.id);est+=c;paid+=p;rem+=Math.max(c-p,0)});
+  const sched=S.payments.reduce((a,p)=>a+num(p.amount),0),out=S.payments.filter(p=>!p.paid).reduce((a,p)=>a+num(p.amount),0);
+  const budget=num(S.settings.budget);return {est,paid,owed:rem,budget,left:budget-est,sched,out}}
+function payChip(p){if(p.paid)return '<span class="chip">Paid</span>';if(!p.due)return '<span class="chip gray">Date TBD</span>';return dueChip(p.due)}
+function upcomingPays(){return S.payments.filter(p=>!p.paid).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'))}
+function today(){return iso(new Date())}
+
+/* ---------- storage (Supabase) ---------- */
+const API='https://osbjpkhxerztakdqdyql.supabase.co/rest/v1/rpc/',APIKEY='sb_publishable_n8WaICi5F2t4cLCTBmgtMA_8AdahHoL';
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(_){return null}},set:(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(_){}}};
+async function rpc(fn,body){const r=await fetch(API+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:APIKEY},body:JSON.stringify(body)});
+  if(!r.ok)throw {code:'http',status:r.status};return r.json()}
+function newId(){try{return crypto.randomUUID()}catch(_){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,10)}}
+function applyDocs(docs){const next={events:[],budget:[],payments:[],guests:[],todos:[],rsvps:[],settings:{}};
+  docs.forEach(d=>{if(d.col==='app'&&d.id==='settings')next.settings=Object.assign({},d.data);else if(next[d.col])next[d.col].push(Object.assign({id:d.id},d.data))});
+  Object.assign(S,next)}
+function cacheNow(){ls.set('wp_cache',JSON.stringify({docs:[...['events','budget','payments','guests','todos','rsvps'].flatMap(c=>S[c].map(x=>({col:c,id:x.id,data:strip(x)}))),{col:'app',id:'settings',data:S.settings}],raw,who}))}
+async function init(){
+  renderNav();passkey=ls.get('wp_key');
+  if(!passkey){mode='login';render();return}
+  const c=ls.get('wp_cache');if(c){try{const j=JSON.parse(c);applyDocs(j.docs||[]);raw=j.raw||[];who=j.who||'';mode='cache'}catch(_){}}
+  render();await load(false);
+}
+async function load(quiet){
+  if(!passkey||pending)return false;
+  let res;try{res=await rpc('wedding_load',{p_key:passkey})}
+  catch(e){if(mode!=='live'){mode=S.budget.length?'offline':'neterr';render()}if(!quiet)toast('Can’t reach the server — check your connection');return false}
+  if(res.error){if(res.error==='auth'){logout('That passcode didn’t work. Try again.');return false}
+    if(res.error==='locked'){if(!ls.get('wp_key')){passkey=null;mode='login';ui.loginMsg='Too many wrong tries. Wait 15 minutes and try again.';render()}else toast('Too many wrong tries. Wait 15 minutes.',5000);return false}}
+  if(pending)return false;
+  who=res.user||'';raw=res.rsvps||[];applyDocs(res.docs||[]);mode='live';cacheNow();render();
+  await intakeRsvps();return true}
+function logout(msg){passkey=null;ls.set('wp_key',null);ls.set('wp_cache',null);Object.assign(S,{events:[],budget:[],payments:[],guests:[],todos:[],rsvps:[],settings:{}});mode='login';ui.loginMsg=msg||'';closeSheet();render()}
+async function save(col,id,data){
+  if(mode==='login')return false;
+  id=id||newId();if(col!=='app'){const prev=S[col].find(x=>x.id===id);
+  if(prev)Object.keys(prev).forEach(k=>{if(k!=='id')delete prev[k]}),Object.assign(prev,data);else S[col].push(Object.assign({id},data))}
+  render();pending++;
+  try{const r=await rpc('wedding_put',{p_key:passkey,p_col:col,p_id:id,p_data:data});pending--;
+    if(r.error){if(r.error==='auth'){logout('Please log in again.');return false}toast(r.error==='locked'?'Locked for 15 minutes after wrong passcodes':'Couldn’t save that');load(true);return false}
+    cacheNow();return id}
+  catch(e){pending--;toast('Not saved — no connection. Try again when you’re online.',4000);load(true);return false}}
+async function del(col,id){
+  S[col]=S[col].filter(x=>x.id!==id);render();pending++;
+  try{const r=await rpc('wedding_del',{p_key:passkey,p_col:col,p_id:id});pending--;if(r.error){toast('Couldn’t delete that');load(true);return false}cacheNow();return true}
+  catch(e){pending--;toast('Not deleted — no connection.');load(true);return false}}
+async function saveSettings(data){S.settings=Object.assign({},S.settings,data);return save('app','settings',S.settings).then(r=>{if(r)S.settings=Object.assign({},S.settings);return r})}
+function strip(o){const r=Object.assign({},o);delete r.id;return r}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load(true)});
+setInterval(()=>{if(document.visibilityState==='visible'&&!$('#sheet').classList.contains('open'))load(true)},30000);
+
+/* ---------- nav / header ---------- */
+function renderNav(){$('#nav').innerHTML=TABS.map(t=>`<button data-tab="${t.k}" class="${t.k===tab?'on':''}"><svg viewBox="0 0 24 24">${t.i}</svg>${t.l}</button>`).join('')}
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.tab;location.hash=tab;renderNav();render();window.scrollTo(0,0)});
+$('#names').addEventListener('click',openSettings);
+function renderHeader(){const n=S.settings.names||'Our Wedding';$('#names').textContent=n;
+  const w=wedding();$('#subline').textContent=w&&w.date?niceDate(w.date):'Wedding planner'}
+
+/* ---------- render ---------- */
+function loginHTML(){return `<form class="login" id="loginForm"><div class="mono">W</div><h2 style="justify-content:center;margin:0">Wedding Planner</h2>
+  <p class="note" style="text-align:center">Enter your passcode</p><input id="pk" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" placeholder="word-word-word-00">
+  <button class="btn" style="width:100%" type="submit">Log in</button><p class="note" style="color:var(--red);text-align:center;min-height:1em">${esc(ui.loginMsg||'')}</p></form>`}
+function render(){
+  renderHeader();
+  const focused=document.activeElement&&document.activeElement.id==='q';
+  let h='';
+  $('#nav').style.display=mode==='login'?'none':'';document.querySelector('header').style.display=mode==='login'?'none':'';
+  if(mode==='login'){$('#main').innerHTML=loginHTML();return}
+  if(mode==='offline')h+=`<div class="banner">Offline — showing your last saved copy. Changes need a connection.</div>`;
+  if(mode==='neterr')h+=`<div class="banner">Can't reach the server. Check your connection — it will keep trying.</div>`;
+  h+=({home:vHome,dates:vDates,money:vMoney,guests:vGuests,todo:vTodo}[tab])();
+  $('#main').innerHTML=h;
+  if(sheetCtx&&sheetCtx.col==='budget'&&sheetCtx.id){const ps=$('#paysec');if(ps)ps.innerHTML=paySecHTML(sheetCtx.id)}
+  if(focused){const q=$('#q');if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}
+  tick();
+}
+
+function countdownHTML(e){
+  if(!e)return `<div class="card hero"><div class="label">The big day</div><p class="serif" style="font-size:22px;margin:10px 0">Set your wedding date to start the countdown</p><button class="btn blush" data-new="events" data-kind="Wedding">Add wedding date</button></div>`;
+  if(!e.date)return `<div class="card hero"><div class="label">${esc(e.name)}</div><p class="serif" style="font-size:22px;margin:10px 0">No date yet</p><button class="btn blush" data-edit="events" data-id="${e.id}">Set the date</button></div>`;
+  return `<div class="card hero" data-edit="events" data-id="${e.id}" style="cursor:pointer"><div class="label">Countdown to ${esc(e.name)}</div>
+   <div class="big" data-cd="${esc(e.date)}T${esc(e.time||'00:00')}"><div><b>–</b><span>days</span></div><div><b>–</b><span>hrs</span></div><div><b>–</b><span>min</span></div><div><b>–</b><span>sec</span></div></div>
+   <div class="when">${esc(niceDate(e.date,e.time))}${e.place?' · '+esc(e.place):''}</div></div>`}
+function tick(){document.querySelectorAll('[data-cd]').forEach(el=>{
+  const t=new Date(el.dataset.cd);let ms=t-new Date();const b=el.querySelectorAll('b');
+  if(isNaN(t))return;
+  if(ms<=0){el.innerHTML='<div><b class="serif">Today!</b><span>it’s happening</span></div>';return}
+  const d=Math.floor(ms/864e5);ms-=d*864e5;const hh=Math.floor(ms/36e5);ms-=hh*36e5;const mm=Math.floor(ms/6e4);const ss=Math.floor((ms-mm*6e4)/1e3);
+  if(b.length===4){b[0].textContent=d;b[1].textContent=hh;b[2].textContent=mm;b[3].textContent=ss}})}
+setInterval(tick,1000);
+
+function upcomingEvents(){return S.events.slice().sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'))}
+
+function eventRow(e){const n=daysUntil(e.date);let r='';
+  if(n===null)r='<span class="chip gray">Set date</span>';else if(n<0)r='<span class="chip gray">Done</span>';else if(n===0)r='<span class="chip blush">Today</span>';else r=`<div class="serif" style="font-size:22px;font-weight:600;line-height:1">${n}</div><div class="s" style="font-size:11px">days</div>`;
+  return `<div class="row" data-edit="events" data-id="${e.id}"><div class="main"><div class="t">${esc(e.name)}</div><div class="s">${esc(niceDate(e.date,e.time))}${e.place?' · '+esc(e.place):''}</div></div><div class="r">${r}</div></div>`}
+
+function vHome(){
+  const w=wedding(),t=totals();
+  const guests=S.guests.filter(g=>g.wedding!==false);const heads=guests.reduce((a,g)=>a+(num(g.size)||1),0);
+  const yes=guests.filter(g=>g.rsvp==='Yes').reduce((a,g)=>a+(num(g.size)||1),0);
+  const noAddr=S.guests.filter(g=>!g.addr).length;
+  const other=upcomingEvents().filter(e=>e!==w&&(daysUntil(e.date)===null||daysUntil(e.date)>=0)).slice(0,4);
+  const pays=upcomingPays().slice(0,4);
+  const todos=S.todos.filter(x=>!x.done).map(x=>Object.assign({},x,{_d:todoDue(x)})).sort((a,b)=>(a._d||'9999').localeCompare(b._d||'9999')).slice(0,4);
+  const un=S.rsvps.filter(r=>!r.guestId).length;
+  return (un?`<div class="banner" data-go="guests" data-gv2="rsvp" style="cursor:pointer">${un} RSVP${un>1?'s':''} need matching to your guest list →</div>`:'')+countdownHTML(w)+
+  `<div class="card"><h3>Coming up</h3>${other.length?other.map(eventRow).join(''):'<div class="empty">No other events yet</div>'}</div>
+   <div class="stats">
+    <div class="stat" data-go="money"><div class="v money">${fmt(t.paid)}</div><div class="k">Paid so far</div></div>
+    <div class="stat" data-go="money"><div class="v money">${fmt(t.owed)}</div><div class="k">Still owed</div></div>
+    <div class="stat" data-go="guests"><div class="v">${heads}</div><div class="k">Invited guests</div></div>
+    <div class="stat" data-go="guests"><div class="v">${yes}</div><div class="k">Wedding RSVP yes</div></div>
+    <div class="stat wide" data-go="guests" data-gv2="rsvp"><div class="v">${showerYes()} <span style="font-size:15px;color:var(--muted);font-family:Inter">coming · ${S.guests.filter(g=>g.shower&&g.showerRsvp!=='Yes'&&g.showerRsvp!=='No').reduce((a,g)=>a+(num(g.size)||1),0)} not answered</span></div><div class="k">Bridal shower RSVPs</div></div>
+   </div>
+   ${pays.length?`<div class="card"><h3>Next payments</h3>${pays.map(payRow).join('')}</div>`:''}
+   <div class="card"><h3>Next to-dos</h3>${todos.length?todos.map(todoRow).join(''):'<div class="empty">All caught up</div>'}</div>
+   ${noAddr?`<p class="note">${noAddr} guest${noAddr>1?'s are':' is'} missing an address.</p>`:''}`}
+
+function vDates(){const ev=upcomingEvents();
+  return `<h2>Dates & countdowns <button class="add" data-new="events">+</button></h2>
+  <div class="card">${ev.length?ev.map(eventRow).join(''):'<div class="empty">Add your wedding, bridal shower, fittings and deadlines</div>'}</div>
+  <p class="note">Tap any event to edit. The one marked type "Wedding" drives the big countdown and the to-do due dates.</p>`}
+
+function payRow(p){
+  return `<div class="row"><div class="check ${p.paid?'on':''}" data-ptog="${p.id}"></div><div class="main" data-edit="payments" data-id="${p.id}"><div class="t">${esc(itemName(p.itemId))}${p.label?' — '+esc(p.label):''}</div><div class="s">${p.paid?'Paid'+(p.datePaid?' '+esc(niceDate(p.datePaid)):''):(p.due?'Due '+esc(niceDate(p.due)):'No due date yet')}</div></div><div class="r"><div class="money">${fmt2(p.amount)}</div>${payChip(p)}</div></div>`}
+function paySecHTML(id){const b=S.budget.find(x=>x.id===id);if(!b)return '';
+  const c=itemCost(b),pd=paidFor(id),nd=nextDue(id),ps=itemPays(id).sort((a,b2)=>(a.due||a.datePaid||'9999').localeCompare(b2.due||b2.datePaid||'9999'));
+  return `<div class="card" style="margin:4px 0 14px"><h3>Payment schedule</h3>
+   <div class="stats" style="grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px">
+    <div><div class="k" style="font-size:11px;color:var(--muted)">TOTAL</div><b class="money">${fmt2(c)}</b></div>
+    <div><div class="k" style="font-size:11px;color:var(--muted)">PAID</div><b class="money">${fmt2(pd)}</b></div>
+    <div><div class="k" style="font-size:11px;color:var(--muted)">BALANCE</div><b class="money">${fmt2(Math.max(c-pd,0))}</b></div></div>
+   <div class="s" style="font-size:12.5px;color:var(--muted)">${nd?'Next due '+esc(niceDate(nd)):'No upcoming due date'} · ${itemStatus(b)[0]}</div>
+   ${ps.map(payRow).join('')||'<div class="empty">No payments scheduled</div>'}
+   <button type="button" class="btn ghost small" data-act="addpay" style="margin-top:8px">+ Add payment / deposit</button></div>`}
+function vMoney(){const t=totals();
+  const pct=t.budget>0?Math.min(100,t.est/t.budget*100):0;
+  const head=`<h2>Money <button class="add" data-new="${ui.mview==='payments'?'payments':'budget'}">+</button></h2>
+  <div class="stats">
+   <div class="stat wide" data-set="budget" style="cursor:pointer"><div class="k">Target budget ${t.budget?'':'· tap to set'}</div><div class="v money">${t.budget?fmt(t.budget):'—'}</div>
+    ${t.budget?`<div class="bar"><i class="${t.est>t.budget?'over':''}" style="width:${pct}%"></i></div><div class="note" style="margin:6px 0 0;${t.est>t.budget?'color:var(--red)':''}">${t.left>=0?fmt(t.left)+' under target':fmt(-t.left)+' over target'}</div>`:''}</div>
+   <div class="stat"><div class="v money">${fmt(t.est)}</div><div class="k">Estimated total</div></div>
+   <div class="stat"><div class="v money">${fmt(t.paid)}</div><div class="k">Paid to date</div></div>
+   <div class="stat"><div class="v money">${fmt(t.owed)}</div><div class="k">Remaining to pay</div></div>
+   <div class="stat" data-set="guests" style="cursor:pointer"><div class="v">${guestCount()}</div><div class="k">Planned guests</div></div>
+  </div>
+  <div class="tools"><label class="btn ghost small" style="cursor:pointer">↑ Import budget spreadsheet<input type="file" id="xin" accept=".xlsx,.xlsm,.xls" hidden></label><button class="btn ghost small" data-act="csv-budget">Copy as spreadsheet</button></div>
+  <div class="seg">${[['items','Budget items'],['payments','Payments & due dates']].map(([k,l])=>`<button data-mv="${k}" class="${ui.mview===k?'on':''}">${l}</button>`).join('')}</div>`;
+  if(ui.mview==='payments'){
+    const up=upcomingPays(),done=S.payments.filter(p=>p.paid).sort((a,b)=>(b.datePaid||'').localeCompare(a.datePaid||''));
+    return head+`<div class="card"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span>Scheduled ${fmt(t.sched)}</span><span>Paid ${fmt(t.sched-t.out)}</span><span>Outstanding ${fmt(t.out)}</span></div><div class="bar"><i style="width:${t.sched?(t.sched-t.out)/t.sched*100:0}%"></i></div></div>
+    <div class="card"><h3>Upcoming</h3>${up.length?up.map(payRow).join(''):'<div class="empty">Nothing due</div>'}</div>
+    <div class="card"><h3>Paid</h3>${done.length?done.map(payRow).join(''):'<div class="empty">No payments marked paid yet</div>'}</div>
+    <p class="note">Tap the circle to mark a payment paid (today's date fills in). Tap the row to change the amount, due date or date paid.</p>`}
+  const cats={};S.budget.forEach(b=>{const c=b.category||'Other';cats[c]=(cats[c]||0)+itemCost(b)});
+  const catList=Object.entries(cats).filter(c=>c[1]>0).sort((a,b)=>b[1]-a[1]);const maxC=Math.max(1,...catList.map(c=>c[1]));
+  let items=S.budget.slice();
+  if(ui.mfilter==='owed')items=items.filter(b=>itemCost(b)-paidFor(b.id)>0);
+  if(ui.mfilter==='paid')items=items.filter(b=>itemCost(b)>0&&paidFor(b.id)>=itemCost(b));
+  items.sort((a,b)=>(a.category||'').localeCompare(b.category||'')||(a.name||'').localeCompare(b.name||''));
+  return head+`<div class="seg">${[['all','All'],['owed','Still owed'],['paid','Paid in full']].map(([k,l])=>`<button data-mf="${k}" class="${ui.mfilter===k?'on':''}">${l}</button>`).join('')}</div>
+  <div class="card">${items.length?items.map(b=>{const c=itemCost(b),[st,cls]=itemStatus(b),q=qtyOf(b),nd=nextDue(b.id),pd=paidFor(b.id);
+    const calc=b.price!==''&&b.price!=null?(q===null?`${fmt2(b.price)} × <span style="color:var(--red)">no qty</span>`:(q!==1?`${fmt2(b.price)} × ${q}${b.perGuest?' guests':''}`:'')):'';
+    return `<div class="row" data-edit="budget" data-id="${b.id}"><div class="main"><div class="t">${esc(b.name)}</div><div class="s">${[esc(b.category||''),esc(b.vendor||''),calc].filter(Boolean).join(' · ')}</div>${(c-pd>0&&nd)?`<div class="s">Next due ${esc(niceDate(nd))}</div>`:''}</div>
+    <div class="r"><div class="money">${fmt(c)}</div><span class="${cls}">${st}</span>${(c-pd>0&&pd>0)?`<div class="s" style="font-size:11.5px">${fmt(c-pd)} left</div>`:''}</div></div>`}).join(''):'<div class="empty">No budget items yet</div>'}</div>
+  ${catList.length?`<div class="card"><h3>By category</h3>${catList.map(([c,v])=>`<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span>${esc(c)}</span><span class="money">${fmt(v)}</span></div><div class="bar"><i style="width:${v/maxC*100}%;background:var(--blush)"></i></div></div>`).join('')}</div>`:''}
+  <p class="note">Paid to date comes from payments marked paid. Tap an item to see and add its payment schedule.</p>`}
+
+function guestMatch(g){const q=ui.q.trim().toLowerCase();
+  if(q&&![g.name,g.group,g.city,g.email,g.phone].join(' ').toLowerCase().includes(q))return false;
+  switch(ui.gfilter){case 'wedding':return g.wedding!==false;case 'shower':return !!g.shower;case 'snoans':return !!g.shower&&g.showerRsvp!=='Yes'&&g.showerRsvp!=='No';case 'noaddr':return !g.addr;
+   case 'pending':return g.wedding!==false&&(!g.rsvp||g.rsvp==='Pending');case 'yes':return g.rsvp==='Yes';case 'thanks':return !!g.gift&&!g.thanks;default:return true}}
+function guestListHTML(){const list=S.guests.filter(guestMatch).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  return list.length?list.map(g=>{
+    const tags=[];if(g.wedding!==false)tags.push(g.rsvp==='Yes'?'<span class="chip">Yes</span>':g.rsvp==='No'?'<span class="chip red">No</span>':'<span class="chip gray">Pending</span>');
+    if(g.shower)tags.push(g.showerRsvp==='Yes'?'<span class="chip blush">Shower ✓</span>':g.showerRsvp==='No'?'<span class="chip red">Shower ✗</span>':'<span class="chip gray">Shower ?</span>');
+    const addr=g.addr?[g.addr,[g.city,g.state].filter(Boolean).join(', '),g.zip].filter(Boolean).join(' '):'No address yet';
+    return `<div class="row" data-edit="guests" data-id="${g.id}"><div class="main"><div class="t">${esc(g.name)}${num(g.size)>1?` <span class="s">(${num(g.size)})</span>`:''}</div><div class="s">${esc(addr)}</div></div><div class="r">${tags.join(' ')}</div></div>`}).join(''):'<div class="empty">'+(S.guests.length?'No guests match':'Add your first guest or household')+'</div>'}
+function heads(x){return x.reduce((a,g)=>a+(num(g.size)||1),0)}
+function showerYes(){return S.guests.filter(g=>g.shower&&g.showerRsvp==='Yes').reduce((a,g)=>a+(num(g.showerParty)||num(g.size)||1),0)}
+function vGuests(){
+  const unmatched=S.rsvps.filter(r=>!r.guestId).length;
+  const seg=`<div class="seg">${[['list','Guest list'],['rsvp','RSVPs & QR codes'+(unmatched?` (${unmatched})`:'')]].map(([k,l])=>`<button data-gv="${k}" class="${ui.gview===k?'on':''}">${l}</button>`).join('')}</div>`;
+  if(ui.gview==='rsvp')return `<h2>RSVPs</h2>`+seg+vRsvp();
+  const all=S.guests,w=all.filter(g=>g.wedding!==false),sh=all.filter(g=>g.shower);
+  return `<h2>Guests <button class="add" data-new="guests">+</button></h2>`+seg+`
+  <div class="stats">
+   <div class="stat"><div class="v">${heads(w)}</div><div class="k">Wedding guests</div></div>
+   <div class="stat"><div class="v">${heads(w.filter(g=>g.rsvp==='Yes'))} / ${heads(w.filter(g=>g.rsvp==='No'))}</div><div class="k">Wedding yes / no</div></div>
+   <div class="stat"><div class="v">${heads(sh)}</div><div class="k">Shower invited</div></div>
+   <div class="stat"><div class="v">${showerYes()} / ${heads(sh.filter(g=>g.showerRsvp==='No'))}</div><div class="k">Shower yes / no</div></div>
+  </div>
+  <div style="margin-top:12px"><input id="q" class="search" placeholder="Search guests" value="${esc(ui.q)}"></div>
+  <div class="seg" style="margin-top:8px">${[['all','All'],['wedding','Wedding'],['shower','Shower'],['snoans','Shower: no answer'],['pending','Wedding RSVP pending'],['yes','Coming'],['noaddr','No address'],['thanks','Thank-you owed']].map(([k,l])=>`<button data-gf="${k}" class="${ui.gfilter===k?'on':''}">${l}</button>`).join('')}</div>
+  <div class="card" id="glist">${guestListHTML()}</div>
+  <div class="tools"><button class="btn ghost small" data-act="csv-guests">Copy addresses (for labels)</button></div>
+  <p class="note">"Copy addresses" puts the filtered list on your clipboard as a spreadsheet — paste into Google Sheets or a label maker.</p>`}
+
+/* ---------- RSVP inbox ---------- */
+function rsvpUrl(ev){const b=(S.settings.rsvpBase||RSVP_DEFAULT).trim();return b+(b.includes('?')?'&':'?')+'e='+ev}
+function qrSVG(text){let m;try{m=QRLib.matrix(text,'M')}catch(_){return ''}const n=m.length,q=4,sz=n+q*2;let d='';
+  m.forEach((row,r)=>row.forEach((on,c)=>{if(on)d+=`M${c+q} ${r+q}h1v1h-1z`}));
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${sz} ${sz}" shape-rendering="crispEdges" style="width:100%;max-width:260px;display:block;margin:0 auto"><rect width="${sz}" height="${sz}" fill="#fff"/><path d="${d}" fill="#2E2A26"/></svg>`}
+function qrImg(text){const svg=qrSVG(text);if(!svg)return '';return `<img alt="QR code" src="data:image/svg+xml;base64,${btoa(svg)}" style="width:100%;max-width:260px;display:block;margin:0 auto;image-rendering:pixelated">`}
+function normName(s){return String(s||'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\b(the|family|and|mr|mrs|ms|miss|dr|aunt|uncle)\b/g,' ').replace(/\s+/g,' ').trim()}
+function findGuest(name){const n=normName(name);if(!n)return null;
+  let hit=S.guests.filter(g=>normName(g.name)===n);if(hit.length===1)return hit[0];
+  const toks=n.split(' ');hit=S.guests.filter(g=>{const gt=normName(g.name).split(' ').filter(Boolean);return gt.length&&(gt.every(t=>toks.includes(t))||(toks.length>=2&&toks.every(t=>gt.includes(t))))});
+  return hit.length===1?hit[0]:null}
+function rsvpRow(r){const g=r.guestId&&S.guests.find(x=>x.id===r.guestId);
+  const when=r.createdAt?new Date(r.createdAt).toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'';
+  const ans=r.attending?`<span class="chip">Yes · ${num(r.party)||1}</span>`:'<span class="chip red">No</span>';
+  const extra=[r.guestNames&&'With: '+r.guestNames,r.meal&&'Meal: '+r.meal,r.dietary&&'Dietary: '+r.dietary,r.contact&&'Contact: '+r.contact,r.message&&'“'+r.message+'”'].filter(Boolean);
+  return `<div style="padding:12px 0;border-top:1px solid var(--line)"><div style="display:flex;justify-content:space-between;gap:10px"><div style="min-width:0"><div class="t" style="font-weight:500">${esc(r.name)}</div><div class="s" style="font-size:12.5px;color:var(--muted)">${r.event==='wedding'?'Wedding':'Shower'} · ${esc(when)}</div></div><div>${ans}</div></div>
+   ${extra.length?`<div style="font-size:13px;margin-top:6px">${extra.map(esc).join('<br>')}</div>`:''}
+   <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">${g?`<span class="chip gray">Matched: ${esc(g.name)}</span><button class="btn ghost small" data-unlink="${r.id}">Change</button>`
+    :`<select data-link="${r.id}" style="flex:1;min-width:160px;padding:8px;border:1px solid var(--line);border-radius:10px;background:#fff"><option value="">Link to a guest…</option>${S.guests.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select><button class="btn small" data-newguest="${r.id}">Add as new guest</button>`}</div></div>`}
+function vRsvp(){
+  const url=rsvpUrl(ui.qrEvent),rs=S.rsvps.slice().sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')),un=rs.filter(r=>!r.guestId);
+  const sync='new RSVPs come in automatically';
+  return `<div class="card" style="text-align:center"><h3>Invitation QR code</h3>
+   <div class="seg" style="justify-content:center">${[['shower','Bridal shower'],['wedding','Wedding']].map(([k,l])=>`<button data-qe="${k}" class="${ui.qrEvent===k?'on':''}">${l}</button>`).join('')}</div>
+   ${qrImg(url)}
+   <div style="font-size:12.5px;color:var(--muted);word-break:break-all;margin:8px 0">${esc(url)}</div>
+   <div class="tools" style="justify-content:center"><button class="btn ghost small" data-act="copyrsvp">Copy link</button><a class="btn ghost small" style="text-decoration:none" href="${esc(url)}" target="_blank" rel="noopener">Open page</a></div>
+   <p class="note">Press and hold the code to save or share it, then add it to your invitations.${ui.qrEvent==='wedding'?' The wedding page says "not open yet" until you turn it on.':''}</p></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><h3 style="margin:0">Responses</h3><div class="s" style="font-size:12.5px;color:var(--muted)">${esc(sync)}</div></div><button class="btn small blush" data-act="syncrsvp">Check for RSVPs</button></div>
+   ${un.length?`<div class="banner" style="margin-top:10px">${un.length} response${un.length>1?'s':''} couldn't be matched to your guest list. Link them below.</div>`:''}
+   ${rs.length?rs.map(rsvpRow).join(''):'<div class="empty">No RSVPs yet</div>'}</div>
+  <p class="note">Guests only ever see the RSVP form. New answers show up here on their own and update each guest.</p>`}
+function applyRsvp(g,r){const o=strip(g);
+  if(r.event==='wedding'){o.wedding=true;o.rsvp=r.attending?'Yes':'No';if(r.meal)o.meal=r.meal}
+  else{o.shower=true;o.showerRsvp=r.attending?'Yes':'No';o.showerParty=r.attending?(num(r.party)||1):0}
+  if(r.dietary)o.dietary=r.dietary;
+  if(r.contact&&!o.phone&&!o.email){if(r.contact.includes('@'))o.email=r.contact;else o.phone=r.contact}
+  return o}
+async function linkRsvp(rid,gid){const r=S.rsvps.find(x=>x.id===rid),g=S.guests.find(x=>x.id===gid);if(!r||!g)return;
+  // later answers win: only apply if this is the newest response for that guest + event
+  const newer=S.rsvps.some(x=>x.id!==rid&&x.guestId===gid&&x.event===r.event&&(x.createdAt||'')>(r.createdAt||''));
+  if(!newer)await save('guests',gid,applyRsvp(g,r));
+  await save('rsvps',rid,Object.assign(strip(r),{guestId:gid}))}
+async function intakeRsvps(){
+  if(intaking||mode!=='live')return;intaking=true;let added=0,matched=0;
+  try{for(const x of raw){if(S.rsvps.some(r=>r.id===x.id))continue;
+      const r={event:x.event,name:x.name,attending:!!x.attending,party:num(x.party_size),guestNames:x.guest_names||'',meal:x.meal||'',dietary:x.dietary||'',message:x.message||'',contact:x.contact||'',createdAt:x.created_at,guestId:''};
+      const id=await save('rsvps',x.id,r);if(!id)break;added++;
+      const g=findGuest(x.name);if(g){await linkRsvp(x.id,g.id);matched++}}}
+  finally{intaking=false}
+  if(added)toast(`${added} new RSVP${added>1?'s':''}${added-matched?` — ${added-matched} to match on the RSVPs screen`:''}`,4000);
+  return added}
+async function syncRsvp(btn){btn.disabled=true;btn.textContent='Checking…';
+  const before=S.rsvps.length;const ok=await load(false);btn.disabled=false;btn.textContent='Check for RSVPs';
+  if(ok&&S.rsvps.length===before)toast('No new RSVPs')}
+
+function todoRow(t){const d=t._d!==undefined?t._d:todoDue(t);
+  return `<div class="row ${t.done?'done':''}"><div class="check ${t.done?'on':''}" data-tog="${t.id}"></div><div class="main" data-edit="todos" data-id="${t.id}"><div class="t">${esc(t.title)}</div><div class="s">${esc(t.cat||'')}${d?' · '+esc(niceDate(d)):''}</div></div><div class="r">${dueChip(d,t.done)}</div></div>`}
+function vTodo(){
+  let l=S.todos.map(x=>Object.assign({},x,{_d:todoDue(x)}));
+  if(ui.tfilter==='open')l=l.filter(x=>!x.done);if(ui.tfilter==='done')l=l.filter(x=>x.done);
+  l.sort((a,b)=>(a._d||'9999').localeCompare(b._d||'9999')||(a.title||'').localeCompare(b.title||''));
+  const done=S.todos.filter(x=>x.done).length;
+  return `<h2>To-do <button class="add" data-new="todos">+</button></h2>
+  <div class="card"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span>${done} of ${S.todos.length} done</span><span>${S.todos.length?Math.round(done/S.todos.length*100):0}%</span></div><div class="bar"><i style="width:${S.todos.length?done/S.todos.length*100:0}%"></i></div></div>
+  <div class="seg">${[['open','To do'],['done','Done'],['all','All']].map(([k,l2])=>`<button data-tf="${k}" class="${ui.tfilter===k?'on':''}">${l2}</button>`).join('')}</div>
+  <div class="card">${l.length?l.map(todoRow).join(''):'<div class="empty">Nothing here</div>'}</div>
+  ${wedding()&&wedding().date?'':'<p class="note">Set the wedding date to fill in due dates for the "months before" tasks.</p>'}`}
+
+/* ---------- forms ---------- */
+function fieldHTML(f,v){const id='f_'+f.k;
+  if(f.t==='cb')return `<div class="f cb"><input type="checkbox" id="${id}" ${v?'checked':''}><label for="${id}">${esc(f.l)}</label></div>`;
+  let inp;
+  if(f.t==='select'){let opts=f.dyn?S.budget.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(b=>({v:b.id,l:b.name})):f.o.map(o=>({v:o,l:o}));
+    if(v&&!opts.some(o=>o.v===v))opts.unshift({v,l:f.dyn?itemName(v):v});
+    inp=`<select id="${id}">${opts.map(o=>`<option value="${esc(o.v)}" ${o.v===v?'selected':''}>${esc(o.l)}</option>`).join('')}</select>`}
+  else if(f.t==='area')inp=`<textarea id="${id}">${esc(v)}</textarea>`;
+  else{const type={num:'number',date:'date',time:'time',tel:'tel',email:'email',url:'url'}[f.t]||'text';
+   inp=`<input id="${id}" type="${type}" ${f.t==='num'?'inputmode="decimal" step="any"':''} value="${esc(v)}" placeholder="${esc(f.ph||'')}">`}
+  return `<div class="f"><label for="${id}">${esc(f.l)}</label>${inp}</div>`}
+function flat(s){return s.flatMap(f=>f.g?f.g:[f])}
+let sheetCtx=null;
+function openForm(col,id,preset){
+  const item=id?S[col].find(x=>x.id===id):null;if(id&&!item)return;
+  const base=item||Object.assign({},...flat(SCHEMA[col]).filter(f=>f.def!==undefined).map(f=>({[f.k]:f.def})),preset||{});
+  sheetCtx={col,id};
+  const fv=f=>base[f.k]??(f.t==='select'&&f.o?f.o[0]:'');
+  let h=`<div class="grab"></div><h4>${id?'Edit':'New'} ${TITLES[col]}</h4><form id="frm">`;
+  SCHEMA[col].forEach(f=>{h+=f.g?`<div class="two">${f.g.map(x=>fieldHTML(x,fv(x))).join('')}</div>`:fieldHTML(f,fv(f))});
+  if(col==='budget'&&item&&(item.phone||item.email||item.link))h+=`<p class="note">${item.phone?`Call: <a href="tel:${esc(item.phone)}">${esc(item.phone)}</a> `:''}${item.email?`Email: ${esc(item.email)} `:''}${item.link?`<a href="${esc(item.link)}" target="_blank" rel="noopener">Open link</a>`:''}</p>`;
+  if(col==='budget'&&id)h=h.replace('<form id="frm">','<form id="frm"><div id="paysec">'+paySecHTML(id)+'</div>');
+  if(col==='payments'&&!S.budget.length){showSheet('<div class="grab"></div><h4>Add a budget item first</h4><p class="note">Payments belong to a budget item.</p><div class="actions"><button class="btn" data-act="close">OK</button></div>');return}
+  h+=`<div class="actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn" type="submit" ${readOnly?'disabled':''}>Save</button></div>`;
+  if(id)h+=`<div class="actions"><button type="button" class="btn danger" data-act="del">Delete</button></div>`;
+  h+='</form>';showSheet(h);
+  $('#frm').addEventListener('submit',async e=>{e.preventDefault();
+    const out=item?strip(item):{};
+    for(const f of flat(SCHEMA[col])){const el=document.getElementById('f_'+f.k);
+      if(f.t==='cb')out[f.k]=el.checked;else if(f.t==='num')out[f.k]=el.value===''?'':num(el.value);else out[f.k]=el.value.trim()}
+    const req=flat(SCHEMA[col]).find(f=>f.req&&(out[f.k]===''||out[f.k]==null));if(req){toast(req.l+' is required');return}
+    if(col==='payments'){if(out.paid&&!out.datePaid)out.datePaid=today();if(!out.paid)out.datePaid=out.datePaid||''}
+    if(await save(col,id,out)){closeSheet();toast('Saved')}});
+}
+function openSettings(){sheetCtx={col:'settings'};
+  showSheet(`<div class="grab"></div><h4>Settings</h4><form id="frm">
+   <div class="f"><label for="s_names">Couple names</label><input id="s_names" value="${esc(S.settings.names||'')}" placeholder="Jordan & ___"></div>
+   <div class="f"><label for="s_budget">Target budget ($)</label><input id="s_budget" type="number" inputmode="decimal" value="${esc(S.settings.budget||'')}"></div>
+   <div class="f"><label for="s_rb">RSVP page address</label><input id="s_rb" type="url" value="${esc(S.settings.rsvpBase||RSVP_DEFAULT)}"></div>
+   <div class="f"><label for="s_gc">Planned guest count (used for per-guest items like catering)</label><input id="s_gc" type="number" inputmode="numeric" value="${esc(S.settings.guestCount||'')}" placeholder="${expectedGuests()} on guest list"></div>
+   <div class="actions"><button type="button" class="btn ghost" data-act="close">Cancel</button><button class="btn" type="submit">Save</button></div>
+   <p class="note" style="text-align:center;margin-top:18px">Logged in as ${esc(who||'—')}</p>
+   <div class="actions"><button type="button" class="btn danger" data-act="logout">Log out on this phone</button></div></form>`);
+  $('#frm').addEventListener('submit',async e=>{e.preventDefault();
+    if(await saveSettings({names:$('#s_names').value.trim(),budget:num($('#s_budget').value),guestCount:$('#s_gc').value===''?'':num($('#s_gc').value),rsvpBase:$('#s_rb').value.trim()||RSVP_DEFAULT})){closeSheet();toast('Saved')}})}
+function showSheet(h){const s=$('#sheet');s.innerHTML=h;s.classList.add('open');$('#veil').classList.add('open');s.scrollTop=0}
+function closeSheet(){$('#sheet').classList.remove('open');$('#veil').classList.remove('open');sheetCtx=null}
+$('#veil').addEventListener('click',closeSheet);
+$('#sheet').addEventListener('click',async e=>{
+  const pt=e.target.closest('[data-ptog]');if(pt){togglePay(pt.dataset.ptog);return}
+  const pe=e.target.closest('[data-edit="payments"]');if(pe){openForm('payments',pe.dataset.id);return}
+  const a=e.target.closest('[data-act]');if(!a)return;
+  if(a.dataset.act==='close')closeSheet();
+  if(a.dataset.act==='logout'){logout('');return}
+  if(a.dataset.act==='addpay'){openForm('payments',null,{itemId:sheetCtx.id});return}
+  if(a.dataset.act==='del'){if(a.dataset.sure){const c=sheetCtx;
+      if(c.col==='budget')for(const p of itemPays(c.id))await del('payments',p.id);
+      if(await del(c.col,c.id)){closeSheet();toast('Deleted')}}else{a.dataset.sure=1;a.textContent=sheetCtx.col==='budget'&&itemPays(sheetCtx.id).length?'Tap again — also deletes its payments':'Tap again to delete'}}
+  if(a.dataset.act==='copyta'){const ta=$('#copyta');ta.select();try{await navigator.clipboard.writeText(ta.value);toast('Copied')}catch(_){toast('Select the text and copy it')}}});
+
+/* ---------- main clicks ---------- */
+$('#main').addEventListener('click',async e=>{const t=e.target;
+  const pt=t.closest('[data-ptog]');if(pt){togglePay(pt.dataset.ptog);return}
+  const gv=t.closest('[data-gv]');if(gv){ui.gview=gv.dataset.gv;render();return}
+  const qe=t.closest('[data-qe]');if(qe){ui.qrEvent=qe.dataset.qe;render();return}
+  const ul=t.closest('[data-unlink]');if(ul){const r=S.rsvps.find(x=>x.id===ul.dataset.unlink);if(r)save('rsvps',r.id,Object.assign(strip(r),{guestId:''}));return}
+  const ng=t.closest('[data-newguest]');if(ng){const r=S.rsvps.find(x=>x.id===ng.dataset.newguest);if(r){
+      const base={name:r.name,size:r.attending?(num(r.party)||1):1,side:"Both / friends",wedding:r.event==='wedding',shower:r.event!=='wedding',rsvp:'Pending',showerRsvp:'Pending'};
+      const gid=await save('guests',null,base);if(gid){await linkRsvp(r.id,gid);toast('Added '+r.name)}}return}
+  const mv=t.closest('[data-mv]');if(mv){ui.mview=mv.dataset.mv;render();return}
+  const tog=t.closest('[data-tog]');if(tog){const it=S.todos.find(x=>x.id===tog.dataset.tog);if(it){const o=strip(it);o.done=!it.done;save('todos',it.id,o)}return}
+  const ed=t.closest('[data-edit]');if(ed){openForm(ed.dataset.edit,ed.dataset.id);return}
+  const nw=t.closest('[data-new]');if(nw){openForm(nw.dataset.new,null,nw.dataset.kind?{kind:nw.dataset.kind,name:'Our Wedding'}:null);return}
+  const go=t.closest('[data-go]');if(go){if(go.dataset.gv2)ui.gview=go.dataset.gv2;tab=go.dataset.go;renderNav();render();window.scrollTo(0,0);return}
+  const st=t.closest('[data-set]');if(st){openSettings();setTimeout(()=>{const el=$(st.dataset.set==='guests'?'#s_gc':'#s_budget');if(el)el.focus()},50);return}
+  const gf=t.closest('[data-gf]');if(gf){ui.gfilter=gf.dataset.gf;render();return}
+  const mf=t.closest('[data-mf]');if(mf){ui.mfilter=mf.dataset.mf;render();return}
+  const tf=t.closest('[data-tf]');if(tf){ui.tfilter=tf.dataset.tf;render();return}
+  const act=t.closest('[data-act]');if(!act)return;
+  if(act.dataset.act==='syncrsvp'){syncRsvp(act);return}
+  if(act.dataset.act==='copyrsvp'){const u=rsvpUrl(ui.qrEvent);try{await navigator.clipboard.writeText(u);toast('Link copied')}catch(_){toast(u,6000)}return}
+  if(act.dataset.act==='csv-guests')copyCSV([['Name','People','Street','City','State','ZIP','Phone','Email','Wedding','Shower','Wedding RSVP','Shower RSVP','Meal','Dietary'],
+    ...S.guests.filter(guestMatch).map(g=>[g.name,num(g.size)||1,g.addr,g.city,g.state,g.zip,g.phone,g.email,g.wedding!==false?'Yes':'No',g.shower?'Yes':'No',g.rsvp||'Pending',g.shower?(g.showerRsvp||'Pending'):'',g.meal,g.dietary])],'guests');
+  if(act.dataset.act==='csv-budget')copyCSV([['Item','Description','Price','Quantity','Total','Vendor','Category','Paid to Date','Balance Remaining','Next Due Date','Payment Status','Link','Notes'],
+    ...S.budget.map(b=>[b.name,b.description,b.price,qtyOf(b)??'',itemCost(b),b.vendor,b.category,paidFor(b.id),Math.max(0,itemCost(b)-paidFor(b.id)),nextDue(b.id),itemStatus(b)[0],b.link,b.notes]),
+    [],['Item','Vendor','Payment / Deposit','Amount','Due Date','Paid?','Date Paid','Notes'],
+    ...S.payments.map(p=>{const b=S.budget.find(x=>x.id===p.itemId)||{};return [b.name||'',b.vendor||'',p.label,num(p.amount),p.due,p.paid?'Yes':'No',p.datePaid,p.notes]})],'rows');
+});
+$('#main').addEventListener('change',async e=>{const lk=e.target.closest&&e.target.closest('[data-link]');if(lk&&lk.value){await linkRsvp(lk.dataset.link,lk.value);toast('Linked');return}
+if(e.target.id==='xin'&&e.target.files[0]){importXlsx(e.target.files[0]);e.target.value=''}});
+$('#main').addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;const gl=$('#glist');if(gl)gl.innerHTML=guestListHTML()}});
+
+async function copyCSV(rows,what){
+  const txt=rows.map(r=>r.map(c=>{c=String(c??'');return /[\t\n"]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join('\t')).join('\n');
+  try{await navigator.clipboard.writeText(txt);toast(`Copied ${rows.length-1} ${what} — paste into a spreadsheet`)}
+  catch(_){showSheet(`<div class="grab"></div><h4>Copy ${what}</h4><p class="note">Select all and copy, then paste into Google Sheets.</p><textarea id="copyta" style="width:100%;min-height:240px;border:1px solid var(--line);border-radius:12px;padding:10px;font-size:12px">${esc(txt)}</textarea><div class="actions"><button class="btn" data-act="copyta">Copy</button><button class="btn ghost" data-act="close">Done</button></div>`)}
+}
+
+/* ---------- payments ---------- */
+async function togglePay(id){const p=S.payments.find(x=>x.id===id);if(!p)return;const o=strip(p);o.paid=!p.paid;
+  if(o.paid&&!o.datePaid)o.datePaid=today();if(!o.paid)o.datePaid='';if(await save('payments',id,o))toast(o.paid?'Marked paid':'Marked unpaid')}
+
+/* ---------- spreadsheet import (built-in .xlsx reader) ---------- */
+async function readXlsx(buf){
+  const u8=new Uint8Array(buf),dv=new DataView(buf),td=new TextDecoder();
+  let e=u8.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error('not a zip');
+  const n=dv.getUint16(e+10,true);let o=dv.getUint32(e+16,true);const files={};
+  for(let i=0;i<n;i++){const fl=dv.getUint16(o+28,true),xl=dv.getUint16(o+30,true),cl=dv.getUint16(o+32,true);
+    files[td.decode(u8.subarray(o+46,o+46+fl))]={m:dv.getUint16(o+10,true),cs:dv.getUint32(o+20,true),lh:dv.getUint32(o+42,true)};o+=46+fl+xl+cl}
+  const get=async name=>{const f=files[name];if(!f)return null;const st=f.lh+30+dv.getUint16(f.lh+26,true)+dv.getUint16(f.lh+28,true),d=u8.subarray(st,st+f.cs);
+    if(f.m===0)return td.decode(d);
+    const out=await new Response(new Blob([d]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer();return td.decode(out)};
+  const P=t=>new DOMParser().parseFromString(t,'application/xml'),tags=(x,t)=>[...x.getElementsByTagNameNS('*',t)];
+  const ss=[],sst=await get('xl/sharedStrings.xml');if(sst)tags(P(sst),'si').forEach(si=>ss.push(tags(si,'t').map(t=>t.textContent).join('')));
+  const wbx=P(await get('xl/workbook.xml')),rmap={};tags(P(await get('xl/_rels/workbook.xml.rels')),'Relationship').forEach(r=>rmap[r.getAttribute('Id')]=r.getAttribute('Target'));
+  const sheets={};
+  for(const sh of tags(wbx,'sheet')){
+    let tg=rmap[sh.getAttribute('r:id')||sh.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')];if(!tg)continue;
+    tg=tg.startsWith('/')?tg.slice(1):'xl/'+tg.replace(/^\.\//,'');const txt=await get(tg);if(!txt)continue;
+    const rows={};
+    tags(P(txt),'c').forEach(c=>{const ref=c.getAttribute('r')||'',m=ref.match(/^([A-Z]+)(\d+)$/);if(!m)return;
+      const t=c.getAttribute('t'),v=tags(c,'v')[0],f=tags(c,'f')[0];let val=v?v.textContent:'';
+      if(t==='s')val=ss[+val]??'';else if(t==='inlineStr')val=tags(c,'t').map(x=>x.textContent).join('');else if(t==='b')val=val==='1';else if(t!=='str'&&t!=='e'&&val!=='')val=+val;
+      (rows[+m[2]]=rows[+m[2]]||{})[m[1]]={v:val,f:f?f.textContent:''}});
+    sheets[sh.getAttribute('name')]=rows}
+  return sheets}
+const str=v=>v==null?'':String(v).trim();
+function xdate(v){if(typeof v==='number'){if(v<1)return '';const d=new Date(Math.round((v-25569)*864e5));return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0')}
+  const t=str(v);if(/^\d{4}-\d{2}-\d{2}/.test(t))return t.slice(0,10);const d=new Date(t);return t&&!isNaN(d)&&d.getFullYear()>1950?iso(d):''}
+function table(rows,need){const nums=Object.keys(rows).map(Number).sort((a,b)=>a-b);
+  const hr=nums.find(r=>str(rows[r].A&&rows[r].A.v).toLowerCase()==='item'&&Object.values(rows[r]).some(c=>str(c.v).toLowerCase().startsWith(need)));
+  if(hr==null)return null;const H={};Object.entries(rows[hr]).forEach(([col,c])=>H[str(c.v).toLowerCase()]=col);
+  const col=n=>{const k=Object.keys(H).find(h=>h.startsWith(n));return k?H[k]:null};
+  return {col,body:nums.filter(r=>r>hr).map(r=>rows[r])}}
+async function importXlsx(file){
+  if(readOnly){toast('You have view-only access');return}
+  toast('Importing…',20000);let book;
+  try{book=await readXlsx(await file.arrayBuffer())}catch(_){toast('That file couldn’t be read — save it as .xlsx and try again',5000);return}
+  const names=Object.keys(book),bn=names.find(n=>/budget/i.test(n))||names[0],pn=names.find(n=>/payment/i.test(n));
+  const brows=book[bn]||{};let gc=null,tb=null;
+  Object.values(brows).forEach(r=>{const a=str(r.A&&r.A.v).toLowerCase(),b=r.B&&r.B.v;if(a.includes('guest count'))gc=num(b);if(a.includes('target budget'))tb=num(b)});
+  const T=table(brows,'price');if(!T){toast('Couldn’t find the Item / Price header row',5000);return}
+  const C={item:T.col('item'),desc:T.col('description'),price:T.col('price'),qty:T.col('quantity'),link:T.col('link'),vendor:T.col('vendor'),cat:T.col('category'),notes:T.col('notes')};
+  const v=(r,k)=>k&&r[k]?r[k].v:'';const ids={};let nItems=0,nPays=0;
+  for(const r of T.body){const name=str(v(r,C.item));if(!name)continue;
+    const qc=C.qty&&r[C.qty],perGuest=!!(qc&&/\$?B\$?3\b/i.test(qc.f||''));const pr=v(r,C.price),q=v(r,C.qty);
+    const ex=S.budget.find(b=>(b.name||'').toLowerCase()===name.toLowerCase());
+    const data=Object.assign(ex?strip(ex):{phone:'',email:''},{name,description:str(v(r,C.desc)),price:pr===''?'':num(pr),qty:perGuest||q===''?'':num(q),perGuest,
+      link:str(v(r,C.link)),vendor:str(v(r,C.vendor)),category:str(v(r,C.cat))||'Other',notes:str(v(r,C.notes))});
+    const id=await save('budget',ex?ex.id:null,data);if(id){ids[name.toLowerCase()]=id;nItems++}}
+  const PT=pn?table(book[pn],'amount'):null;
+  if(PT){const P={item:PT.col('item'),label:PT.col('payment'),amt:PT.col('amount'),due:PT.col('due'),paid:PT.col('paid'),dp:PT.col('date paid'),notes:PT.col('notes')};
+    for(const r of PT.body){const iname=str(v(r,P.item)).toLowerCase();if(!iname||v(r,P.amt)==='')continue;
+      const itemId=ids[iname]||(S.budget.find(b=>(b.name||'').toLowerCase()===iname)||{}).id;if(!itemId)continue;
+      const data={itemId,label:str(v(r,P.label)),amount:num(v(r,P.amt)),due:xdate(v(r,P.due)),paid:/^y/i.test(str(v(r,P.paid))),datePaid:xdate(v(r,P.dp)),notes:str(v(r,P.notes))};
+      const ex=S.payments.find(p=>p.itemId===itemId&&(p.label||'')===data.label&&num(p.amount)===data.amount);
+      if(await save('payments',ex?ex.id:null,ex?Object.assign(strip(ex),data):data))nPays++}}
+  const st={};if(gc)st.guestCount=gc;if(tb)st.budget=tb;if(Object.keys(st).length)await saveSettings(st);
+  ui.mview='items';render();toast(`Imported ${nItems} items and ${nPays} payments`,4000);
+}
+
+/* ---------- login ---------- */
+$('#main').addEventListener('submit',async e=>{if(e.target.id!=='loginForm')return;e.preventDefault();
+  const v=$('#pk').value.trim().toLowerCase();if(!v)return;const b=e.target.querySelector('button');b.disabled=true;b.textContent='Checking…';
+  passkey=v;ui.loginMsg='';mode='loading';const ok=await load(false);
+  if(ok){ls.set('wp_key',v)}else if(mode!=='login'){passkey=null;mode='login';ui.loginMsg=ui.loginMsg||'Couldn\u2019t connect. Check your internet and try again.';render()}});
+
+/* ---------- boot ---------- */
+if(TABS.some(t=>t.k===location.hash.slice(1)))tab=location.hash.slice(1);
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(TABS.some(t=>t.k===h)&&h!==tab){tab=h;renderNav();render()}});
+init();
+</script>
+</body>
+</html>
