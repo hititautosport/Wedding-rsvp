@@ -1431,6 +1431,7 @@ const SCHEMA={
   {k:'email',l:'Email',t:'email'},
   {k:'wedding',l:'Invited to wedding',t:'cb',def:true},
   {k:'shower',l:'Invited to bridal shower',t:'cb'},
+  {k:'showerInvited',l:'# invited to bridal shower',t:'num',ph:'Leave blank to use # of people'},
   {g:[{k:'showerRsvp',l:'Shower RSVP',t:'select',o:['Pending','Yes','No']},{k:'showerParty',l:'# coming to shower',t:'num'}]},
   {k:'std',l:'Save-the-date sent',t:'cb'},
   {k:'invite',l:'Invitation sent',t:'cb'},
@@ -1605,7 +1606,7 @@ function vHome(){
     <div class="stat" data-go="money"><div class="v money">${fmt(t.owed)}</div><div class="k">Still owed</div></div>
     <div class="stat" data-go="guests"><div class="v">${heads}</div><div class="k">Invited guests</div></div>
     <div class="stat" data-go="guests"><div class="v">${yes}</div><div class="k">Wedding RSVP yes</div></div>
-    <div class="stat wide" data-go="guests" data-gv2="rsvp"><div class="v">${showerYes()} <span style="font-size:15px;color:var(--muted);font-family:Inter">coming · ${S.guests.filter(g=>g.shower&&g.showerRsvp!=='Yes'&&g.showerRsvp!=='No').reduce((a,g)=>a+(num(g.size)||1),0)} not answered</span></div><div class="k">Bridal shower RSVPs</div></div>
+    <div class="stat wide" data-go="guests" data-gv2="rsvp"><div class="v">${showerYes()} <span style="font-size:15px;color:var(--muted);font-family:Inter">coming · ${S.guests.filter(g=>g.shower&&g.showerRsvp!=='Yes'&&g.showerRsvp!=='No').reduce((a,g)=>a+showerHeads(g),0)} not answered</span></div><div class="k">Bridal shower RSVPs</div></div>
    </div>
    ${pays.length?`<div class="card"><h3>Next payments</h3>${pays.map(payRow).join('')}</div>`:''}
    <div class="card"><h3>Next to-dos</h3>${todos.length?todos.map(todoRow).join(''):'<div class="empty">All caught up</div>'}</div>
@@ -1668,11 +1669,12 @@ function guestMatch(g){const q=ui.q.trim().toLowerCase();
 function guestListHTML(){const list=S.guests.filter(guestMatch).sort((a,b)=>(a.name||'').localeCompare(b.name||''));
   return list.length?list.map(g=>{
     const tags=[];if(g.wedding!==false)tags.push(g.rsvp==='Yes'?'<span class="chip">Yes</span>':g.rsvp==='No'?'<span class="chip red">No</span>':'<span class="chip gray">Pending</span>');
-    if(g.shower)tags.push(g.showerRsvp==='Yes'?'<span class="chip blush">Shower ✓</span>':g.showerRsvp==='No'?'<span class="chip red">Shower ✗</span>':'<span class="chip gray">Shower ?</span>');
+    if(g.shower){const sn=num(g.showerInvited)?` ${num(g.showerInvited)}`:'';tags.push(g.showerRsvp==='Yes'?`<span class="chip blush">Shower${sn} ✓</span>`:g.showerRsvp==='No'?`<span class="chip red">Shower${sn} ✗</span>`:`<span class="chip gray">Shower${sn} ?</span>`)}
     const addr=g.addr?[g.addr,[g.city,g.state].filter(Boolean).join(', '),g.zip].filter(Boolean).join(' '):'No address yet';
     return `<div class="row" data-edit="guests" data-id="${g.id}"><div class="main"><div class="t">${esc(g.name)}${num(g.size)>1?` <span class="s">(${num(g.size)})</span>`:''}</div><div class="s">${esc(addr)}</div></div><div class="r">${tags.join(' ')}</div></div>`}).join(''):'<div class="empty">'+(S.guests.length?'No guests match':'Add your first guest or household')+'</div>'}
 function heads(x){return x.reduce((a,g)=>a+(num(g.size)||1),0)}
-function showerYes(){return S.guests.filter(g=>g.shower&&g.showerRsvp==='Yes').reduce((a,g)=>a+(num(g.showerParty)||num(g.size)||1),0)}
+function showerHeads(g){return num(g.showerInvited)||num(g.size)||1}
+function showerYes(){return S.guests.filter(g=>g.shower&&g.showerRsvp==='Yes').reduce((a,g)=>a+(num(g.showerParty)||showerHeads(g)),0)}
 function vGuests(){
   const unmatched=S.rsvps.filter(r=>!r.guestId).length;
   const seg=`<div class="seg">${[['list','Guest list'],['rsvp','RSVPs & QR codes'+(unmatched?` (${unmatched})`:'')]].map(([k,l])=>`<button data-gv="${k}" class="${ui.gview===k?'on':''}">${l}</button>`).join('')}</div>`;
@@ -1682,8 +1684,8 @@ function vGuests(){
   <div class="stats">
    <div class="stat"><div class="v">${heads(w)}</div><div class="k">Wedding guests</div></div>
    <div class="stat"><div class="v">${heads(w.filter(g=>g.rsvp==='Yes'))} / ${heads(w.filter(g=>g.rsvp==='No'))}</div><div class="k">Wedding yes / no</div></div>
-   <div class="stat"><div class="v">${heads(sh)}</div><div class="k">Shower invited</div></div>
-   <div class="stat"><div class="v">${showerYes()} / ${heads(sh.filter(g=>g.showerRsvp==='No'))}</div><div class="k">Shower yes / no</div></div>
+   <div class="stat"><div class="v">${sh.reduce((a,g)=>a+showerHeads(g),0)}</div><div class="k">Shower invited</div></div>
+   <div class="stat"><div class="v">${showerYes()} / ${sh.filter(g=>g.showerRsvp==='No').reduce((a,g)=>a+showerHeads(g),0)}</div><div class="k">Shower yes / no</div></div>
   </div>
   <div style="margin-top:12px"><input id="q" class="search" placeholder="Search guests" value="${esc(ui.q)}"></div>
   <div class="seg" style="margin-top:8px">${[['all','All'],['wedding','Wedding'],['shower','Shower'],['snoans','Shower: no answer'],['pending','Wedding RSVP pending'],['yes','Coming'],['noaddr','No address'],['thanks','Thank-you owed']].map(([k,l])=>`<button data-gf="${k}" class="${ui.gfilter===k?'on':''}">${l}</button>`).join('')}</div>
@@ -1842,8 +1844,8 @@ $('#main').addEventListener('click',async e=>{const t=e.target;
   const act=t.closest('[data-act]');if(!act)return;
   if(act.dataset.act==='syncrsvp'){syncRsvp(act);return}
   if(act.dataset.act==='copyrsvp'){const u=rsvpUrl(ui.qrEvent);try{await navigator.clipboard.writeText(u);toast('Link copied')}catch(_){toast(u,6000)}return}
-  if(act.dataset.act==='csv-guests')copyCSV([['Name','People','Street','City','State','ZIP','Phone','Email','Wedding','Shower','Wedding RSVP','Shower RSVP','Meal','Dietary'],
-    ...S.guests.filter(guestMatch).map(g=>[g.name,num(g.size)||1,g.addr,g.city,g.state,g.zip,g.phone,g.email,g.wedding!==false?'Yes':'No',g.shower?'Yes':'No',g.rsvp||'Pending',g.shower?(g.showerRsvp||'Pending'):'',g.meal,g.dietary])],'guests');
+  if(act.dataset.act==='csv-guests')copyCSV([['Name','People','Street','City','State','ZIP','Phone','Email','Wedding','Shower','Shower invited','Wedding RSVP','Shower RSVP','Meal','Dietary'],
+    ...S.guests.filter(guestMatch).map(g=>[g.name,num(g.size)||1,g.addr,g.city,g.state,g.zip,g.phone,g.email,g.wedding!==false?'Yes':'No',g.shower?'Yes':'No',g.shower?showerHeads(g):'',g.rsvp||'Pending',g.shower?(g.showerRsvp||'Pending'):'',g.meal,g.dietary])],'guests');
   if(act.dataset.act==='csv-budget')copyCSV([['Item','Description','Price','Quantity','Total','Vendor','Category','Paid to Date','Balance Remaining','Next Due Date','Payment Status','Link','Notes'],
     ...S.budget.map(b=>[b.name,b.description,b.price,qtyOf(b)??'',itemCost(b),b.vendor,b.category,paidFor(b.id),Math.max(0,itemCost(b)-paidFor(b.id)),nextDue(b.id),itemStatus(b)[0],b.link,b.notes]),
     [],['Item','Vendor','Payment / Deposit','Amount','Due Date','Paid?','Date Paid','Notes'],
